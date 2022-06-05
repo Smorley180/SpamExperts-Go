@@ -10,6 +10,7 @@ import (
 func init() {
 	rootCmd.AddCommand(destinationCmd)
 	destinationCmd.AddCommand(setCmd)
+	destinationCmd.AddCommand(getCmd)
 }
 
 var destinationCmd = &cobra.Command{
@@ -27,9 +28,22 @@ var destinationCmd = &cobra.Command{
 	},
 }
 
+var getCmd = &cobra.Command{
+	Use:   "get [domain]",
+	Short: "Get the destinations for a domain.",
+	Args:  cobra.ExactArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		spamURI := libs.Buildrequest("/api/domain/getroute/domain/" + args[0])
+
+		response := libs.Makerequest(spamURI)
+
+		fmt.Println(response)
+	},
+}
+
 var setCmd = &cobra.Command{
 	Use:   "set [domain] [*destinations]",
-	Short: "Set the destination(s) for a domain.",
+	Short: "Set the destinations for a domain.",
 	Args:  cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 
